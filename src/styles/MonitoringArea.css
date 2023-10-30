@@ -1,0 +1,144 @@
+.monitoring-area {
+  flex-grow: 1;
+  margin-top: 60px;
+  margin-bottom: 60px;
+  backdrop-filter: blur(5px);
+  background-color: rgba(225, 225, 225, 0.1);
+  display: flex;
+  width: 50vw;
+  flex-direction: column;
+  padding: 20px;
+  border: none;
+  border-radius: 5px;
+  box-shadow: 2px 2px 5px #ccc;
+  transition: margin-left 0.3s ease-in-out;
+}
+
+.upper-part {
+  display: inline-block;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+p:first-child {
+  margin: 0 0 20px 0;
+}
+
+p {
+  font-weight: bold;
+  font-size: 24px;
+  user-select: none;
+  margin: 0 0 10px 0;
+}
+
+.robot-info {
+  display: flex;
+  flex-direction: column;
+  padding: 10px;
+  border: none;
+  border-radius: 5px;
+  box-shadow: 2px 2px 5px #ccc;
+}
+
+.info-row {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+
+  margin: 10px 0;
+}
+
+.info-row span:last-child {
+  font-size: 16px;
+  margin: 0 20% 0 0;
+  line-height: 1.5;
+}
+
+.info-row span {
+  font-size: 16px;
+  margin: 0 10px 0 0;
+  line-height: 1.5;
+}
+
+.info-row a {
+  display: inline-block;
+  text-decoration: none;
+  color: #007bff;
+  font-weight: bold;
+  border-bottom: 1px solid transparent;
+}
+
+.info-row a:hover {
+  border-bottom: 1px solid #007bff;
+}
+
+.lower-part {
+  display: flex;
+  flex-direction: column;
+}
+
+.clear-logs {
+  min-height: 50%;
+  padding: 0 5px;
+  background-color: #007bff;
+  color: #fff;
+  border: none;
+  user-select: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.clear-logs:hover {
+  background-color: #005bff;
+}
+
+.log-display-wrapper {
+  height: 250px;
+  box-shadow: 2px 2px 5px #ccc;
+  margin-bottom: 10px;
+  overflow-y: auto;
+}
+
+.log-display-area {
+  padding: 10px;
+  border: none;
+  border-radius: 5px;
+  font-size: 16px;
+  line-height: 1.5;
+}
+
+.log-display-wrapper::-webkit-scrollbar {
+  width: 8px; /* 设置滚动条宽度 */
+}
+
+.log-display-wrapper::-webkit-scrollbar-track {
+  background-color: transparent; /* 设置滚动条背景颜色 */
+}
+
+.log-display-wrapper::-webkit-scrollbar-thumb {
+  background-color: #888; /* 设置滚动条滑块颜色 */
+  border-radius: 4px; /* 设置滚动条滑块圆角 */
+}
+
+.log-display-wrapper::-webkit-scrollbar-thumb:hover {
+  background-color: #555; /* 设置滚动条滑块悬停时的颜色 */
+}
+
+.scroll-bottom {
+  background-color: rgba(255, 255, 255, 0.3);
+  color: #007bff;
+  font-size: 16px;
+  backdrop-filter: blur(10px);
+  line-height: 1.5;
+  border: none;
+  border-radius: 5px;
+  box-shadow: 2px 2px 5px #ccc;
+  transition: background-color 0.3s ease;
+}
+
+.scroll-bottom:hover {
+  background-color: rgba(255, 255, 255, 0.6);
+  color: #005bff;
+}

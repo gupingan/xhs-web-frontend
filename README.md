@@ -1,5 +1,9 @@
 # frontend
 
+## Show
+
+![截图_20231030220454](https://gitee.com/xiaogugyx/drawing-bed/raw/master/%E6%88%AA%E5%9B%BE_20231030220454.png)
+
 ## Project setup
 ```
 npm install

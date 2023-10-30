@@ -1,28 +1,37 @@
 <template>
   <div id="app">
-    <img alt="Vue logo" src="./assets/logo.png">
-    <HelloWorld msg="Welcome to Your Vue.js App"/>
+    <RobotList />
+    <MonitoringArea />
+    <ConfigurationArea />
+    <ParticlesBackground />
   </div>
 </template>
 
 <script>
-import HelloWorld from './components/HelloWorld.vue'
-
+import RobotList from "./components/RobotList.vue";
+import MonitoringArea from "./components/MonitoringArea.vue";
+import ConfigurationArea from "./components/ConfigurationArea.vue";
+import ParticlesBackground from "./components/ParticlesBackground.vue";
 export default {
-  name: 'App',
+  name: "App",
   components: {
-    HelloWorld
-  }
-}
+    RobotList,
+    MonitoringArea,
+    ConfigurationArea,
+    ParticlesBackground,
+  },
+};
 </script>
 
 <style>
 #app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-  margin-top: 60px;
+  display: flex;
+  font-family: "Roboto", Arial, sans-serif;
+}
+body {
+  background-color: #fcfcfc;
+  display: flex;
+  height: 100vh;
+  margin: 0;
 }
 </style>
