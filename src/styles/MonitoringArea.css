@@ -1,7 +1,7 @@
 .monitoring-area {
   flex-grow: 1;
-  margin-top: 60px;
-  margin-bottom: 60px;
+  margin-top: auto;
+  margin-bottom: auto;
   backdrop-filter: blur(5px);
   background-color: rgba(225, 225, 225, 0.1);
   display: flex;
@@ -45,7 +45,6 @@ p {
   flex-direction: row;
   align-items: center;
   justify-content: space-between;
-
   margin: 10px 0;
 }
 
@@ -71,6 +70,10 @@ p {
 
 .info-row a:hover {
   border-bottom: 1px solid #007bff;
+}
+
+.info-row strong {
+  user-select: none;
 }
 
 .lower-part {
@@ -141,4 +144,27 @@ p {
 .scroll-bottom:hover {
   background-color: rgba(255, 255, 255, 0.6);
   color: #005bff;
+}
+
+@media screen and (max-width: 1140px) {
+  .info-row {
+    flex-direction: column;
+    align-items: flex-start;
+    margin: 0;
+  }
+
+  .info-row span:last-child {
+    margin: 5px 0;
+  }
+
+  .info-row span {
+    margin: 5px 0;
+  }
+}
+
+@media screen and (max-width: 992px) {
+  .monitoring-area {
+    align-self: center;
+    min-width: 85vw;
+  }
 }

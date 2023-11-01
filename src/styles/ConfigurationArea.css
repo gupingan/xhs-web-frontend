@@ -1,8 +1,8 @@
 .configuration-area {
   flex-grow: 1;
   backdrop-filter: blur(5px);
-  margin-top: 60px;
-  margin-bottom: 60px;
+  margin-top: auto;
+  margin-bottom: auto;
   background-color: rgba(225, 225, 225, 0.1);
   display: flex;
   flex-direction: column;
@@ -10,6 +10,7 @@
   border: none;
   border-radius: 5px;
   margin-left: 20px;
+  margin-right: 20px;
   box-shadow: 2px 2px 5px #ccc;
 }
 
@@ -199,4 +200,16 @@ hr {
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
   border-radius: 5px;
   z-index: 1000;
+}
+
+@media screen and (max-width: 992px) {
+  .configuration-area {
+    margin-top: 10px;
+    margin-bottom: 10px;
+    padding: 20px;
+    align-self: center;
+    width: 85vw;
+    margin-left: 52px;
+    margin-right: 0;
+  }
 }

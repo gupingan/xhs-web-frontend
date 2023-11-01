@@ -10,10 +10,10 @@
       </div>
       <hr />
 
-      <li v-for="(spider, index) in spiders" :key="spider.sid">
-        <span @click="selectSpider(spider.sid)">{{ index + 1 }}</span>
-        <span class="robot-id" @click="selectSpider(spider.sid)">{{
-          spider.sid
+      <li v-for="(spider, index) in spiders" :key="spider.userId">
+        <span @click="selectSpider(spider.userId)">{{ index + 1 }}</span>
+        <span class="robot-id" @click="selectSpider(spider.userId)">{{
+          spider.userId
         }}</span>
         <div
           class="pause-robot"
@@ -53,8 +53,8 @@ export default {
     this.emitOffsetInfo(1);
   },
   methods: {
-    selectSpider(sid) {
-      EventBus.$emit("selectSpiderSid", sid);
+    selectSpider(userId) {
+      EventBus.$emit("selectSpiderUserId", userId);
     },
     loadSpiders() {
       axios
@@ -83,7 +83,7 @@ export default {
     deleteRobot(spider) {
       axios
         .get(`${apiUrl}delete`, {
-          params: { sid: spider.sid },
+          params: { userId: spider.userId },
         })
         .then((result) => {
           this.spiders = result.data.data;

@@ -144,3 +144,14 @@
   cursor: pointer;
   background-size: cover;
 }
+
+@media screen and (max-width: 1140px) {
+  .robot-list-wrapper {
+    position: fixed;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    min-width: 160px;
+    z-index: 9999;
+  }
+}

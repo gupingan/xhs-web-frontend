@@ -24,7 +24,7 @@
       </div>
     </div>
     <div class="filter-area">
-      <p>筛选依据</p>
+      <p>排序类型</p>
       <hr />
       <label>
         <input
@@ -55,7 +55,7 @@
       </label>
     </div>
     <div class="category-area">
-      <p>分类依据</p>
+      <p>笔记类型</p>
       <hr />
       <label>
         <input

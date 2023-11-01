@@ -1,11 +1,10 @@
 <template>
   <div class="monitoring-area" ref="monitorPanel">
     <div class="upper-part">
-      <!-- 在这里添加当前机器人的相关任务数据 -->
-      <p>当前爬虫数据监控</p>
+      <p>数据监控</p>
       <div class="robot-info">
         <div class="info-row">
-          <span><strong>编号：</strong>{{ fixedMonitorInfo.sid }}</span>
+          <span><strong>用户ID：</strong>{{ fixedMonitorInfo.userId }}</span>
           <span><strong>状态：</strong>{{ fixedMonitorInfo.state }}</span>
         </div>
         <div class="info-row">
@@ -57,9 +56,8 @@
     </div>
 
     <div class="lower-part">
-      <!-- 在这里添加所有机器人的日志区 -->
       <div class="info-row paticular">
-        <p>总监控-重要日志区</p>
+        <p>重要日志区</p>
         <button class="clear-logs" @click="clearDynamicLogs">清空日志</button>
       </div>
       <div class="log-display-wrapper" ref="logWrapper" @scroll="handleScroll">
@@ -89,7 +87,7 @@ export default {
     return {
       ws: null,
       fixedMonitorInfo: {
-        sid: "",
+        userId: "",
         state: "",
         create_time: "",
         pause_time: "",
@@ -104,13 +102,13 @@ export default {
       },
       dynamicLogs: [],
       shouldScrollToBottom: true,
-      selectSpiderSid: null,
+      selectSpiderUserId: null,
       sensitiveWords: [],
     };
   },
   created() {
     EventBus.$on("offsetLeft", this.handleMonitorLeft);
-    EventBus.$on("selectSpiderSid", this.handleSelectSpider);
+    EventBus.$on("selectSpiderUserId", this.handleSelectSpider);
     this.ws = io.connect(websocketUrl, {
       path: "/socket.io",
       transports: ["websocket"],
@@ -122,7 +120,7 @@ export default {
       console.log("Socket.IO Connected.");
     });
     setInterval(() => {
-      const data = this.selectSpiderSid;
+      const data = this.selectSpiderUserId;
       if (data != null) {
         this.ws.emit("updateFixed", data);
         this.ws.emit("updateDynamic", data);
@@ -147,7 +145,7 @@ export default {
   },
   beforeDestroy() {
     EventBus.$off("offsetLeft", this.handleMonitorLeft);
-    EventBus.$off("selectSpiderSid", this.handleSelectSpider);
+    EventBus.$off("selectSpiderUserId", this.handleSelectSpider);
     this.ws.close();
   },
   methods: {
@@ -159,8 +157,8 @@ export default {
         '<a href="$1" target="_blank">$1</a>'
       );
     },
-    handleSelectSpider(sid) {
-      this.selectSpiderSid = sid;
+    handleSelectSpider(userId) {
+      this.selectSpiderUserId = userId;
     },
     // 滚动到底部
     scrollToBottom() {

@@ -34,4 +34,10 @@ body {
   height: 100vh;
   margin: 0;
 }
+
+@media screen and (max-width: 992px) {
+  #app {
+    flex-direction: column;
+  }
+}
 </style>
