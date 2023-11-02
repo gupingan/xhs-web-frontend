@@ -75,10 +75,9 @@
 
 <script>
 import io from "socket.io-client";
-import EventBus from "../js/eventBus";
-import axios from "axios";
+import EventBus from "../../js/eventBus";
+import api from "../../js/api";
 
-const apiUrl = process.env.VUE_APP_API_URL;
 const websocketUrl = process.env.VUE_APP_WEBSOCKET_URL;
 
 export default {
@@ -134,14 +133,10 @@ export default {
         this.dynamicLogs.push(data.dynamicMonitorInfo);
       }
     });
-    axios
-      .get(`${apiUrl}sensitive_words`)
-      .then((result) => {
-        this.sensitiveWords = result.data.data;
-      })
-      .catch((err) => {
-        console.log(err);
-      });
+    console.log("login after");
+    this.$parent.$on("logged-in", () => {
+      this.getSensitiveWords();
+    });
   },
   beforeDestroy() {
     EventBus.$off("offsetLeft", this.handleMonitorLeft);
@@ -184,6 +179,16 @@ export default {
         this.$refs.monitorPanel.style.marginLeft = listWidth * 0.2 + 20 + "px";
       }
     },
+    getSensitiveWords() {
+      api
+        .get(`/spider/sensitive_words`)
+        .then((result) => {
+          this.sensitiveWords = result.data.data;
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    },
   },
   watch: {
     // 监听动态日志数组的变化
@@ -199,4 +204,4 @@ export default {
 };
 </script>
 
-<style scoped src="../styles/MonitoringArea.css"></style>
+<style scoped src="../../styles/MonitoringArea.css"></style>

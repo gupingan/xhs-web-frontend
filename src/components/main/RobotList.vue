@@ -27,10 +27,8 @@
 </template>
 
 <script>
-import axios from "axios";
-import EventBus from "../js/eventBus";
-
-const apiUrl = process.env.VUE_APP_API_URL;
+import EventBus from "../../js/eventBus";
+import api from "../../js/api";
 
 export default {
   name: "RobotList",
@@ -45,10 +43,11 @@ export default {
   },
   beforeDestroy() {
     EventBus.$off("spider", this.handleDataUpdate);
-    this.ws.close();
   },
   mounted() {
-    this.loadSpiders();
+    this.$parent.$on("logged-in", () => {
+      this.loadSpiders();
+    });
     document.querySelector(".robot-list").classList.add("collapsed");
     this.emitOffsetInfo(1);
   },
@@ -57,8 +56,8 @@ export default {
       EventBus.$emit("selectSpiderUserId", userId);
     },
     loadSpiders() {
-      axios
-        .get(`${apiUrl}load`)
+      api
+        .get(`/spider/load`)
         .then((result) => {
           this.spiders = result.data.data;
         })
@@ -71,8 +70,8 @@ export default {
     },
     toggleRun(spider) {
       spider.run = !spider.run;
-      axios
-        .post(`${apiUrl}set_state`, spider)
+      api
+        .post(`/spider/set_state`, spider)
         .then((result) => {
           console.log(result);
         })
@@ -81,8 +80,8 @@ export default {
         });
     },
     deleteRobot(spider) {
-      axios
-        .get(`${apiUrl}delete`, {
+      api
+        .get(`/spider/delete`, {
           params: { userId: spider.userId },
         })
         .then((result) => {
@@ -106,4 +105,4 @@ export default {
 };
 </script>
 
-<style scoped src="../styles/RobotList.css"></style>
+<style scoped src="..//../styles/RobotList.css"></style>

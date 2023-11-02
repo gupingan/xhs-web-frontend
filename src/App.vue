@@ -1,31 +1,18 @@
+<!-- App.vue -->
 <template>
   <div id="app">
-    <RobotList />
-    <MonitoringArea />
-    <ConfigurationArea />
-    <ParticlesBackground />
+    <router-view></router-view>
   </div>
 </template>
 
 <script>
-import RobotList from "./components/RobotList.vue";
-import MonitoringArea from "./components/MonitoringArea.vue";
-import ConfigurationArea from "./components/ConfigurationArea.vue";
-import ParticlesBackground from "./components/ParticlesBackground.vue";
 export default {
   name: "App",
-  components: {
-    RobotList,
-    MonitoringArea,
-    ConfigurationArea,
-    ParticlesBackground,
-  },
 };
 </script>
 
 <style>
 #app {
-  display: flex;
   font-family: "Roboto", Arial, sans-serif;
 }
 body {
@@ -33,11 +20,5 @@ body {
   display: flex;
   height: 100vh;
   margin: 0;
-}
-
-@media screen and (max-width: 992px) {
-  #app {
-    flex-direction: column;
-  }
 }
 </style>

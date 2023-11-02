@@ -276,17 +276,8 @@
 
 <script>
 import QRCode from "qrcode";
-import axios from "axios";
-import EventBus from "../js/eventBus";
-axios.defaults.headers.common["Content-Type"] =
-  "multipart/form-data;charset=UTF-8";
-axios.defaults.headers.common["Access-Control-Allow-Origin"] = "*";
-axios.defaults.headers.common["Access-Control-Allow-Methods"] =
-  "POST,GET,PUT,DELETE,OPTIONS";
-axios.defaults.headers.common["Access-Control-Allow-Headers"] =
-  "token,Content-Type";
-
-const apiUrl = process.env.VUE_APP_API_URL;
+import EventBus from "../../js/eventBus";
+import api from "../../js/api";
 
 export default {
   name: "ConfigurationArea",
@@ -326,12 +317,14 @@ export default {
   },
   watch: {},
   mounted() {
-    this.loadConfigure();
+    this.$parent.$on("logged-in", () => {
+      this.loadConfigure();
+    });
   },
   methods: {
     loadConfigure() {
-      axios
-        .get(`${apiUrl}configure/get`)
+      api
+        .get(`/spider/configure/get`)
         .then((response) => {
           const data = response.data.data;
           this.isMultiKey = data.isMultiKey;
@@ -382,11 +375,11 @@ export default {
         intervalTime: this.intervalTime,
         comments: this.comments,
       };
-      axios
-        .post(`${apiUrl}configure/set`, configure)
+      api
+        .post(`/spider/configure/set`, configure)
         .then((result) => {
           const response = result.data;
-          if (response.success && response.msg == "保存配置成功") {
+          if (response.success && response.msg == "保存成功") {
             alert("保存配置成功");
           } else {
             alert("保存配置失败");
@@ -413,8 +406,8 @@ export default {
       this.getQrCodeUrl();
     },
     createSpider() {
-      axios
-        .post(`${apiUrl}create`, this.$data)
+      api
+        .post(`/spider/create`, this.$data)
         .then((result) => {
           const data = Object.assign({}, result.data.data, this.$data);
           EventBus.$emit("spider", data);
@@ -424,8 +417,8 @@ export default {
         });
     },
     getQrCodeUrl() {
-      axios
-        .get(`${apiUrl}qrcode`)
+      api
+        .get(`/spider/qrcode`)
         .then((result) => {
           console.log(result.data);
           var that = this;
@@ -440,8 +433,8 @@ export default {
               this.showQrCode = true;
 
               const timerID = setInterval(() => {
-                axios
-                  .get(`${apiUrl}qrcode/state?qrId=${qrId}&code=${code}`)
+                api
+                  .get(`/spider/qrcode/state?qrId=${qrId}&code=${code}`)
                   .then((result) => {
                     const state = result.data.msg;
                     if (
@@ -507,6 +500,6 @@ export default {
 };
 </script>
 
-<style scoped src="../styles/ConfigurationArea.css">
+<style scoped src="../../styles/ConfigurationArea.css">
 /* 在这里添加样式 */
 </style>
