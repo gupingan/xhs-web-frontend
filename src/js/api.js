@@ -6,7 +6,6 @@ const instance = axios.create({
   baseURL: apiUrl,
   headers: {
     "Content-Type": "multipart/form-data;charset=UTF-8",
-    Authorization: `Bearer ${localStorage.getItem("token")}`,
     "Access-Control-Allow-Origin": "*",
     "Access-Control-Allow-Methods": "POST,GET,PUT,DELETE,OPTIONS",
     "Access-Control-Allow-Headers": "token,Content-Type",
@@ -15,6 +14,10 @@ const instance = axios.create({
 
 instance.interceptors.request.use(
   function (config) {
+    const token = localStorage.getItem("token");
+    if (token) {
+      config.headers.Authorization = `Bearer ${token}`; // 将Authorization头的设置移动到这里
+    }
     return config;
   },
 

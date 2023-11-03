@@ -8,8 +8,10 @@
     "lint": "vue-cli-service lint"
   },
   "dependencies": {
+    "@fingerprintjs/fingerprintjs": "^4.1.0",
     "axios": "^1.5.1",
     "core-js": "^3.8.3",
+    "fingerprintjs2": "^2.1.4",
     "jquery": "^3.7.1",
     "qrcode": "^1.5.3",
     "socket.io-client": "^4.7.2",

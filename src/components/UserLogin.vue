@@ -1,6 +1,14 @@
 <!-- UserLogin.vue -->
 <template>
   <div class="login-container">
+    <transition name="fade">
+      <div v-show="showSuccess" class="success-message">
+        {{ successMessage }}
+      </div>
+    </transition>
+    <transition name="fade">
+      <div v-show="showError" class="error-message">{{ errorMessage }}</div>
+    </transition>
     <form class="login-form">
       <h2>XHS-AUTO 系统</h2>
       <input v-model="username" placeholder="用户名" autocomplete="username" />
@@ -10,11 +18,7 @@
         type="password"
         autocomplete="current-password"
       />
-      <button @click="login">登录</button>
-      <div v-if="successMessage" class="success-message">
-        {{ successMessage }}
-      </div>
-      <div v-if="errorMessage" class="error-message">{{ errorMessage }}</div>
+      <button @click="login" :disabled="isLoggingIn">登录</button>
     </form>
   </div>
 </template>
@@ -24,14 +28,24 @@ import api from "../js/api";
 export default {
   data() {
     return {
+      isLoggingIn: false,
       username: "",
       password: "",
       successMessage: "",
       errorMessage: "",
+      showSuccess: false,
+      showError: false,
     };
+  },
+  mounted() {
+    this.checkAlreadyLogin();
   },
   methods: {
     login() {
+      if (this.isLoggingIn) {
+        return;
+      }
+      this.isLoggingIn = true;
       const loginData = {
         uname: this.username,
         upwd: this.password,
@@ -40,18 +54,47 @@ export default {
         .post("/user/login", loginData)
         .then((result) => {
           localStorage.setItem("token", result.data.token);
+          this.showSuccess = true;
           this.successMessage = "登录成功！";
           setTimeout(() => {
-            this.successMessage = "";
+            this.showSuccess = false;
             this.$router.push("/main");
-          }, 1500);
+          }, 2500);
+        })
+        .catch((err) => {
+          this.showError = true;
+          if (!err.response) {
+            this.errorMessage = "无法连接到服务器，请检查您的网络连接";
+          } else if (err.response.status === 400) {
+            const login_count = err.response.data.count;
+            console.log(login_count);
+            this.errorMessage = `登录失败，你还有 ${login_count} 次机会`;
+          } else if (err.response.status === 401) {
+            this.errorMessage = "登录失败，该用户不存在";
+          } else if (err.response.status === 403) {
+            const remain_second = err.response.data.remain_second;
+            this.errorMessage = `请 ${remain_second} s后重试`;
+          } else {
+            this.errorMessage = "发生错误，请稍后再试。";
+          }
+          setTimeout(() => {
+            this.showError = false;
+          }, 2500);
+        })
+        .finally(() => {
+          this.isLoggingIn = false;
+        });
+    },
+    checkAlreadyLogin() {
+      api
+        .get("/user/login/state")
+        .then((result) => {
+          if (result.data.success && result.data.msg === "已登录") {
+            this.$router.push("/main");
+          }
         })
         .catch((err) => {
           console.log(err);
-          this.errorMessage = "登录失败，请检查您的用户名和密码。";
-          setTimeout(() => {
-            this.errorMessage = "";
-          }, 3000);
         });
     },
   },
@@ -61,6 +104,8 @@ export default {
 <style scoped>
 .login-container {
   display: flex;
+  position: relative;
+  flex-direction: column;
   justify-content: center;
   align-items: center;
   height: 100vh;
@@ -78,6 +123,7 @@ export default {
 }
 
 .login-form h2 {
+  margin-top: 0;
   margin-bottom: 20px;
   text-align: center;
 }
@@ -118,10 +164,15 @@ export default {
 
 .success-message,
 .error-message {
-  margin-top: 10px;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
   padding: 10px;
   text-align: center;
   border-radius: 5px;
+  z-index: 999;
+  pointer-events: none;
 }
 
 .success-message {
@@ -132,5 +183,14 @@ export default {
 .error-message {
   background-color: #f2dede;
   color: #a94442;
+}
+
+.fade-enter-active,
+.fade-leave-active {
+  transition: opacity 1.2s;
+}
+.fade-enter,
+.fade-leave-to {
+  opacity: 0;
 }
 </style>

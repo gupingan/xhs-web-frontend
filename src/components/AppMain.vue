@@ -22,31 +22,30 @@ export default {
     ConfigurationArea,
     ParticlesBackground,
   },
-  created() {
+  mounted() {
     this.checkLoginStatus();
   },
   methods: {
     checkLoginStatus() {
-      this.$nextTick(() => {
-        const token = localStorage.getItem("token");
-        if (!token) {
-          this.$router.push("/login");
-        } else {
-          api
-            .get("/user/login/state")
-            .then((result) => {
-              if (result.data.msg === "已登录" && result.data.success) {
-                this.$emit("logged-in");
-              } else {
-                this.$router.push("/login");
-              }
-            })
-            .catch((err) => {
-              console.log(err);
+      const token = localStorage.getItem("token");
+      console.log(token);
+      if (!token) {
+        this.$router.push("/login");
+      } else {
+        api
+          .get("/user/login/state")
+          .then((result) => {
+            if (result.data.msg === "已登录" && result.data.success) {
+              this.$emit("logged-in");
+            } else {
               this.$router.push("/login");
-            });
-        }
-      });
+            }
+          })
+          .catch((err) => {
+            console.log(err);
+            this.$router.push("/login");
+          });
+      }
     },
   },
 };

@@ -269,7 +269,13 @@
     </div>
     <div class="button-area">
       <button id="saveConfigure" @click="saveConfigure">保存当前配置</button>
-      <button id="generateRobot" @click="generalSpider">生成机器爬虫</button>
+      <button
+        id="generateRobot"
+        @click="generalSpider"
+        :disabled="isPermission"
+      >
+        {{ generateRobotTitle }}
+      </button>
     </div>
   </div>
 </template>
@@ -313,15 +319,41 @@ export default {
       comments: "",
       multiKeysFile: "请选择多关键词文件",
       commentsFile: "请选择评论文案",
+      isPermission: true,
+      generateRobotTitle: "生成机器爬虫",
     };
   },
   watch: {},
   mounted() {
     this.$parent.$on("logged-in", () => {
       this.loadConfigure();
+      this.loadMaxLimit();
     });
   },
   methods: {
+    loadMaxLimit() {
+      api
+        .get("/spider/verify")
+        .then((result) => {
+          if (result.data.success && result.data.msg === "限制通过") {
+            this.generateRobotTitle = "生成机器爬虫";
+            this.isPermission = false;
+          } else {
+            this.generateRobotTitle = "产生未知错误";
+            this.isPermission = true;
+          }
+        })
+        .catch((err) => {
+          this.isPermission = true;
+          if (!err.response) {
+            this.generateRobotTitle = "请检查网络";
+          } else if (err.response.status === 403) {
+            this.generateRobotTitle = "额度不足请充值";
+          } else if (err.response.status === 500) {
+            this.generateRobotTitle = "服务器错误";
+          }
+        });
+    },
     loadConfigure() {
       api
         .get(`/spider/configure/get`)
@@ -411,9 +443,15 @@ export default {
         .then((result) => {
           const data = Object.assign({}, result.data.data, this.$data);
           EventBus.$emit("spider", data);
+          this.loadMaxLimit();
         })
         .catch((err) => {
-          console.log(err);
+          this.isPermission = true;
+          if (!err.response) {
+            this.generateRobotTitle = "请检查网络";
+          } else if (err.response.status === 403) {
+            this.generateRobotTitle = "额度不足请充值";
+          }
         });
     },
     getQrCodeUrl() {

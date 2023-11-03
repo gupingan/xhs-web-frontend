@@ -56,7 +56,7 @@
     </div>
 
     <div class="lower-part">
-      <div class="info-row paticular">
+      <div class="info-row particular">
         <p>重要日志区</p>
         <button class="clear-logs" @click="clearDynamicLogs">清空日志</button>
       </div>
@@ -108,40 +108,39 @@ export default {
   created() {
     EventBus.$on("offsetLeft", this.handleMonitorLeft);
     EventBus.$on("selectSpiderUserId", this.handleSelectSpider);
-    this.ws = io.connect(websocketUrl, {
-      path: "/socket.io",
-      transports: ["websocket"],
-      upgrade: false,
-      forceNew: true,
-      reconnection: false,
-    });
-    this.ws.on("connect", () => {
-      console.log("Socket.IO Connected.");
-    });
-    setInterval(() => {
-      const data = this.selectSpiderUserId;
-      if (data != null) {
-        this.ws.emit("updateFixed", data);
-        this.ws.emit("updateDynamic", data);
-      }
-    }, 1000);
-    this.ws.on("updateFixed", (data) => {
-      this.fixedMonitorInfo = data.fixedMonitorInfo;
-    });
-    this.ws.on("updateDynamic", (data) => {
-      if (data.dynamicMonitorInfo != "") {
-        this.dynamicLogs.push(data.dynamicMonitorInfo);
-      }
-    });
-    console.log("login after");
     this.$parent.$on("logged-in", () => {
       this.getSensitiveWords();
+      this.ws = io.connect(websocketUrl, {
+        path: "/socket.io",
+        transports: ["websocket"],
+        upgrade: false,
+        forceNew: true,
+        reconnection: false,
+      });
+      this.ws.on("connect", () => {
+        console.log("Socket.IO Connected.");
+      });
+      setInterval(() => {
+        const data = this.selectSpiderUserId;
+        if (data != null) {
+          this.ws.emit("updateFixed", data);
+          this.ws.emit("updateDynamic", data);
+        }
+      }, 1000);
+      this.ws.on("updateFixed", (data) => {
+        this.fixedMonitorInfo = data.fixedMonitorInfo;
+      });
+      this.ws.on("updateDynamic", (data) => {
+        if (data.dynamicMonitorInfo != "") {
+          this.dynamicLogs.push(data.dynamicMonitorInfo);
+        }
+      });
     });
   },
   beforeDestroy() {
     EventBus.$off("offsetLeft", this.handleMonitorLeft);
     EventBus.$off("selectSpiderUserId", this.handleSelectSpider);
-    this.ws.close();
+    if (this.ws) this.ws.close();
   },
   methods: {
     formatLog(log) {
