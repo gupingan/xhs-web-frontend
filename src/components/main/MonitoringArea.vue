@@ -116,6 +116,7 @@ export default {
         upgrade: false,
         forceNew: true,
         reconnection: false,
+        query: { token: localStorage.getItem("token") },
       });
       this.ws.on("connect", () => {
         console.log("Socket.IO Connected.");
@@ -132,7 +133,7 @@ export default {
       });
       this.ws.on("updateDynamic", (data) => {
         if (data.dynamicMonitorInfo != "") {
-          this.dynamicLogs.push(data.dynamicMonitorInfo);
+          this.dynamicLogs.push(`${data.user} ` + data.dynamicMonitorInfo);
         }
       });
     });

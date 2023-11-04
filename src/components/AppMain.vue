@@ -42,8 +42,11 @@ export default {
             }
           })
           .catch((err) => {
-            console.log(err);
-            this.$router.push("/login");
+            if (!err.response) {
+              console.log("网络无响应");
+            } else {
+              this.$router.push("/login");
+            }
           });
       }
     },

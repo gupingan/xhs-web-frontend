@@ -65,13 +65,14 @@ export default {
           this.showError = true;
           if (!err.response) {
             this.errorMessage = "无法连接到服务器，请检查您的网络连接";
-          } else if (err.response.status === 400) {
-            const login_count = err.response.data.count;
-            console.log(login_count);
-            this.errorMessage = `登录失败，你还有 ${login_count} 次机会`;
           } else if (err.response.status === 401) {
-            this.errorMessage = "登录失败，该用户不存在";
+            const login_count = err.response.data.count;
+            this.errorMessage = `登录失败，你还有 ${login_count} 次机会`;
           } else if (err.response.status === 403) {
+            this.errorMessage = "登录失败，账号已被封禁";
+          } else if (err.response.status === 404) {
+            this.errorMessage = "登录失败，该用户不存在";
+          } else if (err.response.status === 429) {
             const remain_second = err.response.data.remain_second;
             this.errorMessage = `请 ${remain_second} s后重试`;
           } else {
